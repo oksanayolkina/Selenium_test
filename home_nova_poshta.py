@@ -2,6 +2,7 @@ from selenium import webdriver
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
+import time
 
 import unittest
 
@@ -25,18 +26,19 @@ class nova_poshta(unittest.TestCase):
         # screenshot
         wd.save_screenshot('screenshot.png')
 
-        # и тут начинается проблема(
-        menu = wd.find_element_by_css_selector('#top_menu>li.hover.show_sub>a')
-        submenu = wd.find_element_by_css_selector('#top_menu >li.hover.show_sub>ul>li.hover>a')
+        # ActionChains работает
+        menu = wd.find_element_by_css_selector('#top_menu > li:nth-child(5) > a')
+        submenu = wd.find_element_by_css_selector('#top_menu > li:nth-child(5) > ul > li:nth-child(1) > a')
         action = ActionChains(wd)
-        action.move_to_element(menu)
-        action.click(submenu)
-        action.perform()
-        # ---------------------------------------------------------------------
+        action.move_to_element(menu).perform()
+        time.sleep(1)
+        action.click(submenu).perform()
+        time.sleep(2)
 
-        wd.find_element_by_name("city").click()
-        wd.find_element_by_id("i_City").clear()
-        wd.find_element_by_id("i_City").send_keys("ки")
+        # еще не исправлено
+        wd.find_element_by_xpath('//*[@id="i_City"]').click()
+        wd.find_element_by_xpath('//*[@id="i_City"]').clear()
+        wd.find_element_by_xpath('//*[@id="i_City"]').send_keys("ки")
         wd.find_element_by_css_selector("li.Київ.hover").click()
         wd.find_element_by_id("i_Office_num").click()
         wd.find_element_by_xpath("//div[@class='dropdown']//li[.='Всі типи']").click()
